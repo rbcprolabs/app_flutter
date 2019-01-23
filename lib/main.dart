@@ -5,6 +5,8 @@ import 'package:rbk/screens/ArticlesList.dart';
 import 'package:rbk/config.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:rbk/model/model.dart';
+import 'package:rbk/redux/actions/counterReducer.dart';
 import 'package:rbk/redux/reducers/articles.dart';
 
 Future main() async {
@@ -14,7 +16,7 @@ Future main() async {
 }
 
 class RBK extends StatelessWidget {
- final Store store = Store<AppState>(
+ final Store<AppState> store = Store<AppState>(
       appStateReducer,
       initialState: AppState.initialState(),
     );
@@ -68,7 +70,8 @@ class RBK extends StatelessWidget {
                     )),
                 body: TabBarView(
                   children: [
-                    ArticlesList(),
+                    // ArticlesList(),
+                    MyHomePage(),
                     Icon(Icons.directions_transit),
                     Icon(Icons.directions_bike),
                   ],
@@ -82,66 +85,124 @@ class RBK extends StatelessWidget {
 
 
 
-// class MyHomePage extends StatelessWidget {
-//   final store = new Store<MyAppState>(counterReducer, initialState: MyAppState(0));
- 
-//   @override
-//   Widget build(BuildContext context) {
-//     return new StoreProvider(
-//       store: store,
-//       child: Scaffold(
-//         appBar: AppBar(
-//           title: Text('grokonez Redux Demo'),
-//         ),
-//         body: Center(
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: <Widget>[
-//               StoreConnector<MyAppState, String>(
-//                   converter: (store) => store.state.counter.toString(),
-//                   builder: (context, counter) {
-//                     return Text(
-//                       counter,
-//                       style: TextStyle(
-//                         color: Colors.blue,
-//                         fontSize: 20.0,
-//                       ),
-//                     );
-//                   }),
-//               Padding(
-//                   padding: EdgeInsets.all(20.0),
-//                   child: StoreConnector<MyAppState, VoidCallback>(
-//                     converter: (store) {
-//                       return () => store.dispatch({
-//                             'type': Actions.INCREMENT,
-//                             'number': 3,
-//                           });
-//                     },
-//                     builder: (context, callback) {
-//                       return RaisedButton(
-//                         child: Text('INC'),
-//                         onPressed: callback,
-//                       );
-//                     },
-//                   )),
-//               StoreConnector<MyAppState, VoidCallback>(
-//                 converter: (store) {
-//                   return () => store.dispatch({
-//                         'type': Actions.DECREMENT,
-//                         'number': 2,
-//                       });
-//                 },
-//                 builder: (context, callback) {
-//                   return RaisedButton(
-//                     child: Text('DEC'),
-//                     onPressed: callback,
-//                   );
-//                 },
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+
+
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Redux Items'),
+      ),
+      body: StoreConnector<AppState, _ViewModel>(
+        converter: (Store<AppState> store) => _ViewModel.create(store),
+        builder: (BuildContext context, _ViewModel viewModel) => Column(
+              children: <Widget>[
+                AddItemWidget(viewModel),
+                Expanded(child: ItemListWidget(viewModel)),
+                RemoveItemsButton(viewModel),
+              ],
+            ),
+      ),
+    );
+  }
+}
+
+class RemoveItemsButton extends StatelessWidget {
+  final _ViewModel model;
+
+  RemoveItemsButton(this.model);
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      child: Text('Delete all Items'),
+      onPressed: () => model.onRemoveItems(),
+    );
+  }
+}
+
+class ItemListWidget extends StatelessWidget {
+  final _ViewModel model;
+
+  ItemListWidget(this.model);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: model.items
+          .map((Item item) => ListTile(
+                title: Text(item.body),
+                leading: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () => model.onRemoveItem(item),
+                ),
+              ))
+          .toList(),
+    );
+  }
+}
+
+class AddItemWidget extends StatefulWidget {
+  final _ViewModel model;
+
+  AddItemWidget(this.model);
+
+  @override
+  _AddItemState createState() => _AddItemState();
+}
+
+class _AddItemState extends State<AddItemWidget> {
+  final TextEditingController controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: 'add an Item',
+      ),
+      onSubmitted: (String s) {
+        widget.model.onAddItem(s);
+        controller.text = '';
+      },
+    );
+  }
+}
+
+class _ViewModel {
+  final List<Item> items;
+  final Function(String) onAddItem;
+  final Function(Item) onRemoveItem;
+  final Function() onRemoveItems;
+
+  _ViewModel({
+    this.items,
+    this.onAddItem,
+    this.onRemoveItem,
+    this.onRemoveItems,
+  });
+
+  factory _ViewModel.create(Store<AppState> store) {
+    _onAddItem(String body) {
+      store.dispatch(AddItemAction(body));
+    }
+
+    _onRemoveItem(Item item) {
+      store.dispatch(RemoveItemAction(item));
+    }
+
+    _onRemoveItems() {
+      store.dispatch(RemoveItemsAction());
+    }
+
+    return _ViewModel(
+      items: store.state.items,
+      onAddItem: _onAddItem,
+      onRemoveItem: _onRemoveItem,
+      onRemoveItems: _onRemoveItems,
+    );
+  }
+}
+

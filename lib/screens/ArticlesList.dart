@@ -4,21 +4,22 @@ import 'package:rbk/widgets/article/ArticleCard.dart';
 import 'package:rbk/widgets/containers/ContainerList.dart';
 import 'package:rbk/config.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-// import 'package:rbk/redux/types.dart';
+import 'package:rbk/model/model.dart';
+import 'package:rbk/redux/actions/counterReducer.dart';
 import 'package:rbk/redux/reducers/articles.dart';
-import 'package:rbk/redux/store.dart';
+// import 'package:rbk/redux/types.dart';
 //import 'package:http/http.dart' as http;
 
 class ArticlesList extends StatefulWidget {
-    // final Store<int> store;
-      // ArticlesList({Key key, this.store}) : super(key: key);
-
+  // final Store<int> store;
+  // ArticlesList({Key key, this.store}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
     return ArticlesListState();
   }
 }
+
 
 class ArticlesListState extends State<ArticlesList> {
   List<ArticleData> data = [];
@@ -29,19 +30,14 @@ class ArticlesListState extends State<ArticlesList> {
       backgroundColor: Color(COLOR_5),
       body: ContainerList(
         children: [
-           _buildList(),
-         
+          _buildList(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.refresh),
           backgroundColor: Color(COLOR_2),
           onPressed: () => _load()),
-   
     );
-
-    
-  
   }
 
   _load() {
