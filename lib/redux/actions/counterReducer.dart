@@ -1,4 +1,4 @@
-import 'package:rbk/model/model.dart';
+import 'package:rbk/model/Item.dart';
 
 class AddItemAction {
   static int _id = 0;
@@ -15,6 +15,7 @@ class RemoveItemAction {
   final Item item;
 
   RemoveItemAction(this.item);
+
 }
 
 class RemoveItemsAction {}

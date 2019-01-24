@@ -16,13 +16,3 @@ class Item {
     );
   }
 }
-
-class AppState {
-  final List<Item> items;
-
-  AppState({
-    @required this.items,
-  });
-
-  AppState.initialState() : items = List.unmodifiable(<Item>[]);
-}
