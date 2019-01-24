@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rbk/config.dart';
 import 'package:flutter/rendering.dart';
 import 'package:rbk/widgets/article/ArticleSourceData.dart';
+import 'package:rbk/widgets/tag/Tag.dart';
 
 class ArticleCard extends StatelessWidget {
   ArticleCard({this.article});
@@ -46,6 +47,10 @@ class ArticleCard extends StatelessWidget {
                           style: TextStyle(
                               color: Color(COLOR_2), fontSize: FONT_SIZE),
                         ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: INTENT),
+                        child: Tag(title: 'This is a tag', active: true),
                       ),
                     ],
                   )),
