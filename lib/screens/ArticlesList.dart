@@ -52,7 +52,6 @@ class ArticlesListState extends State<ArticlesList> {
         }
       },
     ];
-    print('dataList $dataTest');
 
     // var allData = dataTest as Map<String, dynamic>;
     var dataList = List<ArticleData>();

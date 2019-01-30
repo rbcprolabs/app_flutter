@@ -3,10 +3,14 @@ import 'package:rbk/model/Item.dart';
 
 class AppState {
   final List<Item> items;
+  // final List<Item> articles;
 
   AppState({
-    @required this.items,
+    this.items,
+    // this.articles,
   });
 
-  AppState.initialState() : items = List.unmodifiable(<Item>[]);
+  //AppState.initialState(this.items, this.articles);
+  AppState.initialState(): items = List.unmodifiable(<Item>[]);
+
 }

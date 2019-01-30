@@ -18,7 +18,7 @@ class ViewModel {
 
   factory ViewModel.create(Store<AppState> store) {
     _onAddItem(String body) {
-      store.dispatch(AddItemAction(body));
+      store.dispatch(TestItemAction(body));
     }
 
     _onRemoveItem(Item item) {

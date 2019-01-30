@@ -1,23 +1,13 @@
-import 'package:rbk/states/AppState.dart';
 import 'package:rbk/model/Item.dart';
-import 'package:rbk/redux/actions/counterReducer.dart';
+import 'package:rbk/redux/actions/articles.dart';
 
-AppState appStateReducer(AppState state, action) {
-  return AppState(
-    items: itemReducer(state.items, action),
-  );
-}
-
-List<Item> itemReducer(List<Item> state, action) {
-  if (action is AddItemAction) {
+List<Item> articleReducer(List<Item> state, action) {
+  if (action is SetArticles) {
     return []
       ..addAll(state)
-      ..add(Item(id: action.id, body: action.item));
+      ..add(Item(id: action.id, body: action.article));
   }
 
-  if (action is RemoveItemsAction) {
-    return List.unmodifiable([]);
-  }
 
   return state;
 }

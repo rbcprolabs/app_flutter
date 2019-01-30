@@ -62,7 +62,7 @@ class RBK extends StatelessWidget {
                   children: [
                     ArticlesList(),
                     Home(),
-                    Icon(Icons.directions_transit),
+                    // Icon(Icons.directions_transit),
                     Icon(Icons.directions_bike),
                   ],
                 ),

@@ -1,10 +1,10 @@
 import 'package:rbk/model/Item.dart';
 
-class AddItemAction {
+class TestItemAction {
   static int _id = 0;
   final String item;
 
-  AddItemAction(this.item) {
+  TestItemAction(this.item) {
     _id++;
   }
 
