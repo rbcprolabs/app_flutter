@@ -8,7 +8,10 @@ import 'package:rbk/states/AppState.dart';
 import 'package:rbk/redux/reducers/articles.dart';
 
 final Reducer <List<Item>> itemsReducer = combineReducers <List<Item>>([
-  TypedReducer<List<Item>, TestItemAction>(testReducer),
+  TypedReducer<List<Item>, SetArticles>(articleReducer),
+]);
+
+final Reducer <List<Item>> itemsReducer2 = combineReducers <List<Item>>([
   TypedReducer<List<Item>, SetArticles>(articleReducer),
 ]);
 
@@ -16,7 +19,7 @@ AppState appStateReducer(AppState state, action) {
   print('state $state');
   return AppState(
     items: itemsReducer(state.items, action),
-    articles: articleReducer(state.articles, action),
+    articles: itemsReducer2(state.articles, action),
   );
 }
 
